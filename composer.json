@@ -1,0 +1,20 @@
+{
+  "name": "jamset/commands-executor",
+  "description": "Module containing classes aiming on execution of system commands",
+  "license": "MIT",
+  "require": {
+    "php": ">=5.5.9"
+  },
+  "authors": [
+    {
+      "name": "Jam Set",
+      "email": "jamset@joinger.org"
+    }
+  ],
+  "minimum-stability": "dev",
+  "autoload": {
+    "psr-4": {
+      "React\\CommandsExecutor\\": "src/"
+    }
+  }
+}

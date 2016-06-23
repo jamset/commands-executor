@@ -50,7 +50,7 @@ class LinuxCommands
      * @return null
      * @throws CommandsExecutionException
      */
-    public function tryTerminateProcess(Process $process)
+    public static function tryTerminateProcess(Process $process)
     {
         try {
 

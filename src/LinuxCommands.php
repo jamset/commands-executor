@@ -14,9 +14,69 @@ use CommandsExecutor\Inventory\Exceptions\CommandsExecutionInvalidArgument;
 use CommandsExecutor\Inventory\CpuMemDto;
 use CommandsExecutor\Inventory\PidCpuMemDto;
 use CommandsExecutor\Inventory\PidDto;
+use React\ChildProcess\Process;
 
 class LinuxCommands
 {
+
+    /**
+     * @param $pid
+     * @return null|string
+     */
+    public static function trySendSigTerm($pid)
+    {
+        $resultInfo = null;
+
+        $sendSigTermResult = self::sendSig($pid, SIGTERM);
+
+        if (!$sendSigTermResult) {
+
+            $resultInfo = "SigTerm for PID " . $pid . " wasn't success.";
+
+            $sendSigKillResult = self::sendSig($pid, SIGKILL);
+
+            if (!$sendSigKillResult) {
+                $resultInfo .= " Child process with PID $pid can't be sigKilled.";
+            } else {
+                $resultInfo .= " SendSigKillResult = " . serialize($sendSigKillResult);
+            }
+        }
+
+        return $resultInfo;
+    }
+
+    /**
+     * @param Process $process
+     * @return null
+     * @throws CommandsExecutionException
+     */
+    public function tryTerminateProcess(Process $process)
+    {
+        try {
+
+            $terminationResult = $process->terminate();
+
+            if (!$terminationResult) {
+                throw new CommandsExecutionException("Process termination for PID " . $process->getPid() . " wasn't success");
+            }
+
+        } catch (\Exception $e) {
+
+            try {
+
+                self::sendSig($process->getPid(), SIGKILL);
+
+            } catch (\Exception $e) {
+
+                throw new CommandsExecutionException("SIGKILL for PID " . $process->getPid() . " wasn't success");
+
+            }
+        }
+
+        return null;
+    }
+
+
     /**
      * @param $commandName
      * @param null $pid

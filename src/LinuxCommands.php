@@ -23,7 +23,7 @@ class LinuxCommands
      * @param $pid
      * @return null|string
      */
-    public static function trySendSigTerm($pid)
+    public static function sendSigTermOrKill($pid)
     {
         $resultInfo = null;
 

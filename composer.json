@@ -12,7 +12,6 @@
       "email": "jamset@joinger.org"
     }
   ],
-  "minimum-stability": "dev",
   "autoload": {
     "psr-4": {
       "CommandsExecutor\\": "src/"
